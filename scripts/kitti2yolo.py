@@ -64,15 +64,17 @@ kitti2yolotype_dict = {'Car': '0',
                        'Pedestrian': '1',
                        'Person_sitting': '1',
                        'Cyclist': '2',
-                       'Truck': '3',
-                       'Tram': '6',
-                       'Misc': '6',
-                       'DontCare': '6'}
+                       'Truck': '3'}
 
 
 def kitti2yolo(kitti_label, img_height, img_width):
 
     kitti_label_arr = kitti_label.split(' ')
+
+    if kitti_label_arr[0] not in kitti2yolotype_dict.keys():
+        #print("{} not in {}".format(kitti_label_arr[0], kitti2yolotype_dict.keys()))
+        return None
+
     x1 = float(kitti_label_arr[4])
     y1 = float(kitti_label_arr[5])
     x2 = float(kitti_label_arr[6])
@@ -129,11 +131,15 @@ def main(args):
                                  + labelfilename.split('.txt')[0] + '.png')
             height, width, frame_depth = cvimage.shape
             for kitti_label in kittilabelfile:
-                yolo_labels.append(kitti2yolo(kitti_label,
+                parsed_kitti_label = kitti2yolo(kitti_label,
                                               img_height=height,
-                                              img_width=width))
+                                              img_width=width)
+                if parsed_kitti_label is None:
+                    continue
+                yolo_labels.append(parsed_kitti_label)
         with open(yolo_path + labelfilename, 'w+') as yololabelfile:
             for label in yolo_labels:
+                #print("Writing {} to {}".format(label, yolo_path+labelfilename))
                 yololabelfile.write(label + '\n')
 
 
