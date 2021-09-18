@@ -1,0 +1,4 @@
+./darknet detector train data/kitti.data cfg/yolov4-kitti.cfg yolov4.conv.137 -map -gpus 0
+./darknet detector train data/kitti_coco.data cfg/yolov4-kitti-coco.cfg yolov4.conv.137 -map -gpus 0
+
+./darknet detector demo data/bus.data cfg/yolov4-tiny_bus.cfg weights/yolov4-tiny_bus_best_with_coco_1.weights ~/Downloads/RecM01_DST20210725_111929_112142_0D1E808_17D6203.mp4 -ext_output -out_filename ~/Downloads/RecM01_DST20210725_111929_112142_0D1E808_17D6203_processed.mp4 -thresh 0.25
